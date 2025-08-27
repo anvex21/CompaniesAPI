@@ -11,16 +11,31 @@ import java.time.Instant;
 @Table(name = "companies")
 public class Company extends PanacheEntity {
     @Column(nullable = false)
-    public String name;
+    private String name;
+
     @Column(nullable = false, length = 2)
-    public String country;
+    private String country;
 
     @Column(nullable = false, unique = true)
-    public String symbol;
+    private String symbol;
 
-    public String website;
-    public String email;
+    private String website;
+    private String email;
 
     @Column(nullable = false)
-    public Instant createdAt;
+    private Instant createdAt;
+
+    public String getName() { return name; }
+    public String getCountry() { return country; }
+    public String getSymbol() { return symbol; }
+    public String getWebsite() { return website; }
+    public String getEmail() { return email; }
+    public Instant getCreatedAt() { return createdAt; }
+
+    public void setName(String name) { this.name = name; }
+    public void setCountry(String country) { this.country = country; }
+    public void setSymbol(String symbol) { this.symbol = symbol; }
+    public void setWebsite(String website) { this.website = website; }
+    public void setEmail(String email) { this.email = email; }
+    public void setCreatedAt(Instant createdAt) { this.createdAt = createdAt; }
 }

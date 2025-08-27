@@ -27,4 +27,10 @@ public class CompanyController {
     public List<Company> getCompanies() {
         return service.getAllCompanies();
     }
+
+    @PUT
+    @Path("/UpdateCompany/{id}")
+    public Company updateCompany(@PathParam("id") Long id, CompanyDTO dto) {
+        return service.updateCompany(id, dto);
+    }
 }

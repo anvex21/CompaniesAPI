@@ -18,14 +18,31 @@ public class CompanyService {
     @Transactional
     public Company createCompany(CompanyDTO dto) {
         Company c = new Company();
-        c.name = dto.name;
-        c.country = dto.country;
-        c.symbol = dto.symbol;
-        c.website = dto.website;
-        c.email = dto.email;
-        c.createdAt = Instant.now();
+        c.setName(dto.getName());
+        c.setCountry(dto.getCountry());
+        c.setSymbol(dto.getSymbol());
+        c.setWebsite(dto.getWebsite());
+        c.setEmail(dto.getEmail());
+        c.setCreatedAt(Instant.now());
+
         repository.persist(c);
         return c;
+    }
+
+    @Transactional
+    public Company updateCompany(Long id, CompanyDTO dto) {
+        Company c = repository.findById(id);
+        if(c == null){
+            throw new RuntimeException("No such company found.");
+        }
+        c.setName(dto.getName());
+        c.setCountry(dto.getCountry());
+        c.setSymbol(dto.getSymbol());
+        c.setWebsite(dto.getWebsite());
+        c.setEmail(dto.getEmail());
+        repository.persist(c);
+        return c;
+
     }
 
     public List<Company> getAllCompanies() {

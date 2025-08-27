@@ -1,5 +1,6 @@
 package controller;
 
+import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 import service.CompanyService;
 import entity.Company;
 import dto.CompanyDTO;
@@ -11,6 +12,7 @@ import java.util.List;
 @Path("/companies")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
+@Tag(name = "Companies")
 public class CompanyController {
 
     @Inject

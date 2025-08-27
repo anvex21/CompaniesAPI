@@ -20,19 +20,19 @@ public class CompanyController {
 
     @POST
     @Path("/CreateCompany")
-    public Company CreateCompany(CompanyDTO dto) {
+    public Company createCompany(CompanyDTO dto) {
         return service.createCompany(dto);
     }
 
     @GET
     @Path("/GetAllCompanies")
-    public List<Company> GetCompanies() {
+    public List<Company> getCompanies() {
         return service.getAllCompanies();
     }
 
     @PUT
     @Path("/UpdateCompany/{id}")
-    public Company UpdateCompany(@PathParam("id") Long id, CompanyDTO dto) {
+    public Company updateCompany(@PathParam("id") Long id, CompanyDTO dto) {
         return service.updateCompany(id, dto);
     }
 }

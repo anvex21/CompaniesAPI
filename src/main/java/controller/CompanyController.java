@@ -1,5 +1,6 @@
 package controller;
 
+import jakarta.validation.Valid;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 import service.CompanyService;
 import entity.Company;
@@ -20,7 +21,7 @@ public class CompanyController {
 
     @POST
     @Path("/CreateCompany")
-    public Company createCompany(CompanyDTO dto) {
+    public Company createCompany(@Valid CompanyDTO dto) {
         return service.createCompany(dto);
     }
 
@@ -32,7 +33,7 @@ public class CompanyController {
 
     @PUT
     @Path("/UpdateCompany/{id}")
-    public Company updateCompany(@PathParam("id") Long id, CompanyDTO dto) {
+    public Company updateCompany(@PathParam("id") Long id, @Valid CompanyDTO dto) {
         return service.updateCompany(id, dto);
     }
 }

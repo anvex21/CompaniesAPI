@@ -1,12 +1,25 @@
 package dto;
 
-import java.time.Instant;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Size;
+
 
 public class CompanyDTO {
+
+    @NotBlank
     private String name;
+
+    @NotBlank
+    @Size(min = 2, max = 2)
     private String country;
+
+    @NotBlank
     private String symbol;
+
     private String website;
+
+    @Email
     private String email;
 
     public String getName() { return name; }

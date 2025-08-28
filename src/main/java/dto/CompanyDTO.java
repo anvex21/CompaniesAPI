@@ -3,6 +3,7 @@ package dto;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Size;
+import org.hibernate.validator.constraints.URL;
 
 
 public class CompanyDTO {
@@ -17,6 +18,7 @@ public class CompanyDTO {
     @NotBlank(message = "Symbol cannot be blank.")
     private String symbol;
 
+    @URL(message = "Website must be a valid URL (it should start with http/https).")
     private String website;
 
     @Email

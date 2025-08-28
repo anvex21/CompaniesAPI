@@ -7,14 +7,14 @@ import jakarta.validation.constraints.Size;
 
 public class CompanyDTO {
 
-    @NotBlank
+    @NotBlank(message = "Name cannot be blank.")
     private String name;
 
-    @NotBlank
+    @NotBlank(message = "Country cannot be blank.")
     @Size(min = 2, max = 2)
     private String country;
 
-    @NotBlank
+    @NotBlank(message = "Symbol cannot be blank.")
     private String symbol;
 
     private String website;

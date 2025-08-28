@@ -5,6 +5,7 @@ import entity.Company;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
+import jakarta.ws.rs.WebApplicationException;
 import repository.CompanyRepository;
 
 import java.time.Instant;
@@ -34,6 +35,9 @@ public class CompanyService {
         Company c = repository.findById(id);
         if(c == null){
             throw new RuntimeException("No such company found.");
+        }
+        if (repository.find("symbol", dto.getSymbol()).firstResult() != null) {
+            throw new WebApplicationException("Company symbol '" + dto.getSymbol() + "' already exists", 409);
         }
         c.setName(dto.getName());
         c.setCountry(dto.getCountry());

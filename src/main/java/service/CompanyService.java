@@ -6,10 +6,12 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.WebApplicationException;
+import jakarta.ws.rs.core.Response;
 import repository.CompanyRepository;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.Map;
 
 @ApplicationScoped
 public class CompanyService {
@@ -18,6 +20,13 @@ public class CompanyService {
 
     @Transactional
     public Company createCompany(CompanyDTO dto) {
+        if (repository.find("symbol", dto.getSymbol()).firstResult() != null) {
+            throw new WebApplicationException(
+                    Response.status(Response.Status.CONFLICT)
+                            .entity(Map.of("error", "Company symbol '" + dto.getSymbol() + "' already exists"))
+                            .build()
+            );
+        }
         Company c = new Company();
         c.setName(dto.getName());
         c.setCountry(dto.getCountry());
@@ -33,11 +42,21 @@ public class CompanyService {
     @Transactional
     public Company updateCompany(Long id, CompanyDTO dto) {
         Company c = repository.findById(id);
-        if(c == null){
-            throw new RuntimeException("No such company found.");
+        if (c == null) {
+            throw new WebApplicationException(
+                    Response.status(Response.Status.NOT_FOUND)
+                            .entity(Map.of("error", "Company with id " + id + " not found"))
+                            .build()
+            );
         }
-        if (repository.find("symbol", dto.getSymbol()).firstResult() != null) {
-            throw new WebApplicationException("Company symbol '" + dto.getSymbol() + "' already exists", 409);
+
+        Company existing = repository.find("symbol", dto.getSymbol()).firstResult();
+        if (existing != null && !existing.id.equals(id)) {
+            throw new WebApplicationException(
+                    Response.status(Response.Status.CONFLICT)
+                            .entity(Map.of("error", "Company symbol '" + dto.getSymbol() + "' already exists"))
+                            .build()
+            );
         }
         c.setName(dto.getName());
         c.setCountry(dto.getCountry());

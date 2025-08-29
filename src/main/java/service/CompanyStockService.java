@@ -33,7 +33,7 @@ public class CompanyStockService {
     @ConfigProperty(name = "finnhub.api.key")
     String apiKey;
 
-    @Transactional
+    @Transactional // Starts a transaction, if the method finishes normally -> saves changes in the db. If not -> cancels changes (rollback)
     public CompanyStock getOrFetchCompanyStock(Long companyId) {
         Company company = companyRepository.findById(companyId);
         if (company == null) {
@@ -42,11 +42,13 @@ public class CompanyStockService {
 
         Optional<CompanyStock> latestStock = Optional.ofNullable(stockRepository.findLatestByCompanyId(companyId));
         Instant oneDayAgo = Instant.now().minus(java.time.Duration.ofDays(1));
+        // if the last record for the company is made within 24 hours, returns it
         if (latestStock.isPresent() && latestStock.get().getFetchedAt().isAfter(oneDayAgo)) {
             return latestStock.get();
         }
 
         // Fetch from Finnhub
+        // if the last record  is older than 24 hours, it calls the Finnhub API
         CompanyProfileResponse profile = finnhubClient.getCompanyProfile(company.getSymbol(), apiKey);
 
         CompanyStock stock = new CompanyStock();
@@ -59,7 +61,8 @@ public class CompanyStockService {
         return stock;
     }
 
-    @Transactional
+    // returns the DTO with all the necessary fields
+    @Transactional // Starts a transaction, if the method finishes normally -> saves changes in the db. If not -> cancels changes (rollback)
     public CompanyStockDTO getCompanyStockDTO(Long companyId) {
         CompanyStock stock = getOrFetchCompanyStock(companyId);
 

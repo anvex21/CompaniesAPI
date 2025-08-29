@@ -5,6 +5,7 @@ import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.QueryParam;
 
+// Client to fetch information from the Finnhub API
 @RegisterRestClient(configKey = "finnhub-api")
 public interface FinnhubClient {
 

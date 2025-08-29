@@ -18,7 +18,7 @@ public class CompanyService {
     @Inject
     CompanyRepository repository;
 
-    @Transactional
+    @Transactional // Starts a transaction, if the method finishes normally -> saves changes in the db. If not -> cancels changes (rollback)
     public Company createCompany(CompanyDTO dto) {
         if (repository.find("symbol", dto.getSymbol()).firstResult() != null) {
             throw new WebApplicationException(
@@ -39,7 +39,7 @@ public class CompanyService {
         return c;
     }
 
-    @Transactional
+    @Transactional // Starts a transaction, if the method finishes normally -> saves changes in the db. If not -> cancels changes (rollback)
     public Company updateCompany(Long id, CompanyDTO dto) {
         Company c = repository.findById(id);
         if (c == null) {

@@ -3,9 +3,11 @@ package client;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class CompanyProfileResponse {
+    // mapping JSON to Java
     @JsonProperty("marketCapitalization")
     public Double marketCapitalization;
 
+    // mapping JSON to Java
     @JsonProperty("shareOutstanding")
     public Double shareOutstanding;
 

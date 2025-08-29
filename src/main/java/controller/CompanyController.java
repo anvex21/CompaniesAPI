@@ -27,6 +27,7 @@ public class CompanyController {
     @POST
     public Response createCompany(@Valid CompanyDTO dto) {
         Company company = service.createCompany(dto);
+        // sets the http status code to 201, sets the Location header (Location: /companies/{id}), .entity defines the body of the response, .build finalizies
         return Response.created(URI.create("/companies/" + company.id))
                 .entity(CompanyResponseDTO.fromEntity(company))
                 .build();
@@ -34,6 +35,8 @@ public class CompanyController {
 
     @GET
     public Response getCompanies() {
+        // takes a list with companies from the service, converts it into stream<company>, appliesCompanyResponseDTO.fromEntity(company), collects
+        // all the dtos into a list
         List<CompanyResponseDTO> companies = service.getAllCompanies()
                 .stream()
                 .map(CompanyResponseDTO::fromEntity)

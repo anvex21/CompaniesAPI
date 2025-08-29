@@ -1,16 +1,7 @@
 plugins {
     id 'java'
     id 'io.quarkus'
-    id "org.sonarqube" version "4.4.1.3373"
-}
-
-sonar {
-    properties {
-        property "sonar.projectKey", "anvex21_CompaniesAPI"
-        property "sonar.organization", "anvex21"
-        property "sonar.host.url", "https://sonarcloud.io"
-        property "sonar.gradle.skipCompile", "true"
-    }
+    id "org.sonarqube" version "4.4.0.3225"
 }
 
 repositories {
@@ -52,4 +43,13 @@ compileJava {
 
 compileTestJava {
     options.encoding = 'UTF-8'
+}
+
+sonarqube {
+    properties {
+        property "sonar.projectKey", "anvex21_CompaniesAPI"
+        property "sonar.organization", "anvex21"
+        property "sonar.host.url", "https://sonarcloud.io"
+        property "sonar.login", "dca688ded1283db5f4328bd50396036abc908be4"
+    }
 }

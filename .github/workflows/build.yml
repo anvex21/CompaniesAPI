@@ -1,22 +1,51 @@
-name: Build and Test
+name: CI Build & Sonar
 
 on:
   push:
-    branches: [ "**" ]
+    branches: [ main ]
   pull_request:
-    branches: [ "**" ]
+    branches: [ main ]
 
 jobs:
-  build:
+  build-and-sonar:
     runs-on: ubuntu-latest
 
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: companies
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd="pg_isready -U postgres"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v3
+
       - name: Set up JDK 17
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v3
         with:
-          java-version: '17'
-          distribution: 'temurin'
-          cache: maven
-      - name: Build with Maven
-        run: mvn --batch-mode --update-snapshots verify
+          java-version: 17
+          distribution: temurin
+
+      - name: Cache Gradle packages
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper/
+          key: gradle-${{ runner.os }}-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            gradle-${{ runner.os }}
+
+      - name: Build Project
+        run: ./gradlew build -Dquarkus.profile=ci --no-daemon
+
+      - name: SonarCloud Scan
+        run: ./gradlew sonarqube -Dquarkus.profile=ci --no-daemon

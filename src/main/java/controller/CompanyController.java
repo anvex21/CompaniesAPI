@@ -1,6 +1,8 @@
 package controller;
 
+import dto.CompanyResponseDTO;
 import jakarta.validation.Valid;
+import jakarta.ws.rs.core.Response;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 import service.CompanyService;
 import entity.Company;
@@ -8,7 +10,10 @@ import dto.CompanyDTO;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
+
+import java.net.URI;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Path("/companies")
 @Produces(MediaType.APPLICATION_JSON)
@@ -20,20 +25,26 @@ public class CompanyController {
     CompanyService service;
 
     @POST
-    @Path("/")
-    public Company createCompany(@Valid CompanyDTO dto) {
-        return service.createCompany(dto);
+    public Response createCompany(@Valid CompanyDTO dto) {
+        Company company = service.createCompany(dto);
+        return Response.created(URI.create("/companies/" + company.id))
+                .entity(CompanyResponseDTO.fromEntity(company))
+                .build();
     }
 
     @GET
-    @Path("/")
-    public List<Company> getCompanies() {
-        return service.getAllCompanies();
+    public Response getCompanies() {
+        List<CompanyResponseDTO> companies = service.getAllCompanies()
+                .stream()
+                .map(CompanyResponseDTO::fromEntity)
+                .collect(Collectors.toList());
+        return Response.ok(companies).build();
     }
 
     @PUT
     @Path("/{id}")
-    public Company updateCompany(@PathParam("id") Long id, @Valid CompanyDTO dto) {
-        return service.updateCompany(id, dto);
+    public Response updateCompany(@PathParam("id") Long id, @Valid CompanyDTO dto) {
+        Company updated = service.updateCompany(id, dto);
+        return Response.ok(CompanyResponseDTO.fromEntity(updated)).build();
     }
 }

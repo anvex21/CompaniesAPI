@@ -1,5 +1,4 @@
 name: Build and Test with Gradle and PostgreSQL
-run: ./gradlew build -Dquarkus.profile=ci
 
 on:
   push:
@@ -32,4 +31,4 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
       - name: Build and test with Gradle
-        run: ./gradlew build
+        run: ./gradlew build -Dquarkus.profile=ci

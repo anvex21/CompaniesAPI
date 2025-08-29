@@ -9,6 +9,7 @@ sonar {
         property "sonar.projectKey", "anvex21_CompaniesAPI"
         property "sonar.organization", "anvex21"
         property "sonar.host.url", "https://sonarcloud.io"
+        property "sonar.gradle.skipCompile", "true"
     }
 }
 

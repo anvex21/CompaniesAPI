@@ -1,10 +1,10 @@
-name: Build and Sonar Analysis
+name: Build & SonarCloud
 
 on:
   push:
-    branches: [ "**" ]
+    branches: [ "main" ]
   pull_request:
-    branches: [ "**" ]
+    branches: [ "main" ]
 
 jobs:
   build:
@@ -12,31 +12,30 @@ jobs:
 
     services:
       postgres:
-        image: postgres:15
-        ports:
-          - 5432:5432
+        image: postgres:14
         env:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
           POSTGRES_DB: companies
+        ports:
+          - 5432:5432
         options: >-
-          --health-cmd="pg_isready -U postgres"
-          --health-interval=10s
-          --health-timeout=5s
-          --health-retries=5
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v3
 
       - name: Set up JDK 17
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v3
         with:
           distribution: temurin
           java-version: 17
 
       - name: Cache Gradle packages
-        uses: actions/cache@v4
+        uses: actions/cache@v3
         with:
           path: |
             ~/.gradle/caches
@@ -46,7 +45,8 @@ jobs:
             ${{ runner.os }}-gradle-
 
       - name: Build with Gradle (CI profile)
-        run: ./gradlew build sonarqube -Dquarkus.profile=ci
+        run: ./gradlew build sonarqube --info
         env:
+          QUARKUS_PROFILE: ci
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

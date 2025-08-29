@@ -23,12 +23,15 @@ jobs:
           --health-interval=10s
           --health-timeout=5s
           --health-retries=5
+
     steps:
       - uses: actions/checkout@v4
+
       - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
           java-version: '17'
           distribution: 'temurin'
+
       - name: Build and test with Gradle
-        run: ./gradlew build -Dquarkus.profile=ci
+        run: ./gradlew clean build -Dquarkus.profile=ci

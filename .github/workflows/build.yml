@@ -15,7 +15,7 @@ jobs:
         ports:
           - 5432:5432
         env:
-          POSTGRES_DB: companies
+          POSTGRES_DB: CompaniesDb
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
         options: >-

@@ -40,7 +40,7 @@ public class CompanyController {
         List<CompanyResponseDTO> companies = service.getAllCompanies()
                 .stream()
                 .map(CompanyResponseDTO::fromEntity)
-                .collect(Collectors.toList());
+                .toList();
         return Response.ok(companies).build();
     }
 

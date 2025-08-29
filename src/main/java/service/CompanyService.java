@@ -15,6 +15,7 @@ import java.util.Map;
 
 @ApplicationScoped
 public class CompanyService {
+    private static final String ERROR_KEY = "error";
     @Inject
     CompanyRepository repository;
 
@@ -23,7 +24,7 @@ public class CompanyService {
         if (repository.find("symbol", dto.getSymbol()).firstResult() != null) {
             throw new WebApplicationException(
                     Response.status(Response.Status.CONFLICT)
-                            .entity(Map.of("error", "Company symbol '" + dto.getSymbol() + "' already exists"))
+                            .entity(Map.of(ERROR_KEY, "Company symbol '" + dto.getSymbol() + "' already exists"))
                             .build()
             );
         }
@@ -45,7 +46,7 @@ public class CompanyService {
         if (c == null) {
             throw new WebApplicationException(
                     Response.status(Response.Status.NOT_FOUND)
-                            .entity(Map.of("error", "Company with id " + id + " not found"))
+                            .entity(Map.of(ERROR_KEY, "Company with id " + id + " not found"))
                             .build()
             );
         }
@@ -54,7 +55,7 @@ public class CompanyService {
         if (existing != null && !existing.id.equals(id)) {
             throw new WebApplicationException(
                     Response.status(Response.Status.CONFLICT)
-                            .entity(Map.of("error", "Company symbol '" + dto.getSymbol() + "' already exists"))
+                            .entity(Map.of(ERROR_KEY, "Company symbol '" + dto.getSymbol() + "' already exists"))
                             .build()
             );
         }

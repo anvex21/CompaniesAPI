@@ -12,8 +12,4 @@ public class CompanyStockRepository implements PanacheRepository<CompanyStock> {
         // Returns the latest CompanyStock entry for the given companyId (ordering it by fetchedAt desc, returns the first result (latest)
         return find("company.id = ?1 ORDER BY fetchedAt DESC", companyId).firstResult();
     }
-    /*
-    public List<CompanyStock> findAllByCompanyId(Long companyId) {
-        return list("company.id", companyId);
-    } */
 }

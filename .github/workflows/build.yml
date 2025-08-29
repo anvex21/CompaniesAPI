@@ -1,4 +1,5 @@
 name: Build and Test with Gradle and PostgreSQL
+run: ./gradlew build -Dquarkus.profile=ci
 
 on:
   push:

@@ -33,5 +33,13 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
+      - name: Wait for PostgreSQL
+        run: |
+          for i in {1..30}; do
+            nc -z localhost 5432 && echo "Postgres is ready" && break
+            echo "Waiting for Postgres..."
+            sleep 2
+          done
+
       - name: Build and test with Gradle
         run: ./gradlew clean build -Dquarkus.profile=ci

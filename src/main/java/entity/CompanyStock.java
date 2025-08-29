@@ -8,6 +8,7 @@ import java.time.Instant;
 @Entity
 @Table(name="company_stocks")
 public class CompanyStock extends PanacheEntity {
+    // M:1
     @ManyToOne(optional = false)
     @JoinColumn(name = "company_id", nullable = false)
     private Company company;

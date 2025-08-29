@@ -9,10 +9,11 @@ import java.util.List;
 @ApplicationScoped
 public class CompanyStockRepository implements PanacheRepository<CompanyStock> {
     public CompanyStock findLatestByCompanyId(Long companyId) {
-        // Returns the latest CompanyStock entry for the given companyId
+        // Returns the latest CompanyStock entry for the given companyId (ordering it by fetchedAt desc, returns the first result (latest)
         return find("company.id = ?1 ORDER BY fetchedAt DESC", companyId).firstResult();
     }
+    /*
     public List<CompanyStock> findAllByCompanyId(Long companyId) {
-        return find("companyId", companyId).list();
-    }
+        return list("company.id", companyId);
+    } */
 }

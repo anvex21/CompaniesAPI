@@ -42,6 +42,6 @@ jobs:
           done
 
       - name: Build and test with Gradle
-        run: ./gradlew clean build -Dquarkus.profile=ci
+        run: ./gradlew clean build
         env:
           QUARKUS_PROFILE: ci

@@ -46,7 +46,7 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install postgresql-client -y
-          PGPASSWORD=postgres psql -h localhost -U postgres -d CompaniesDb -c '/dt'
+          PGPASSWORD=postgres psql -h localhost -U postgres -d CompaniesDb -c '\dt'
 
       - name: Build and test with Gradle
         run: ./gradlew --no-daemon clean build

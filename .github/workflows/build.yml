@@ -40,8 +40,15 @@ jobs:
             echo "Waiting for Postgres..."
             sleep 2
           done
+          
+
+      - name: Test Connection
+        run: |
+          sudo apt-get update
+          sudo apt-get install postgres-client -y
+          PGPASSWORD=postgres psql -h localhost -U postgres -d CompaniesDb -c '/dt'
 
       - name: Build and test with Gradle
-        run: ./gradlew clean build
+        run: ./gradlew --no-daemon clean build
         env:
           QUARKUS_PROFILE: ci

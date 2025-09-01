@@ -55,3 +55,9 @@ jobs:
           CI_DB_PASSWORD: ${{ secrets.CI_DB_PASSWORD }}
           CI_DB_URL: ${{ secrets.CI_DB_URL }}
           FINNHUB_API_KEY: ${{ secrets.FINNHUB_API_KEY }}
+
+      - name: SonarQube JacocoTest
+        run: |
+          ./gradlew test jacocoTestReport
+          ./gradlew sonarqube \
+            -Dsonar.coverage.jacoco.xmlReportPaths=build/reports/jacoco/test/jacocoTestReport.xml

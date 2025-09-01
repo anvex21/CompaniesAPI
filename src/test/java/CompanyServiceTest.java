@@ -1,11 +1,8 @@
-package com.example.company;
-
 import dto.CompanyDTO;
 import entity.Company;
 import io.quarkus.test.TestTransaction;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
-import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
 import service.CompanyService;
 

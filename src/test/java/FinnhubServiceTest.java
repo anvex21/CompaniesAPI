@@ -1,7 +1,3 @@
-package com.example.company;
-
-import client.CompanyProfileResponse;
-import client.FinnhubClient;
 import entity.Company;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
@@ -10,7 +6,6 @@ import org.junit.jupiter.api.Test;
 import service.CompanyStockService;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;

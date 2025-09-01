@@ -2,6 +2,7 @@ plugins {
     id 'java'
     id 'io.quarkus'
     id "org.sonarqube" version "3.4.0.2513"
+    id 'jacoco'
 }
 
 repositories {
@@ -23,6 +24,9 @@ dependencies {
     implementation 'io.quarkus:quarkus-hibernate-orm'
     testImplementation 'io.quarkus:quarkus-junit5'
     testImplementation 'io.rest-assured:rest-assured'
+    testImplementation 'org.assertj:assertj-core:3.26.0'
+    testImplementation 'org.testcontainers:junit-jupiter:1.20.1'
+    testImplementation 'org.testcontainers:postgresql:1.20.1'
 
 }
 
@@ -36,6 +40,8 @@ java {
 
 test {
     systemProperty "java.util.logging.manager", "org.jboss.logmanager.LogManager"
+    useJUnitPlatform()
+    finalizedBy jacocoTestReport
 }
 compileJava {
     options.encoding = 'UTF-8'
@@ -52,5 +58,18 @@ sonarqube {
         property "sonar.organization", "anvex21"
         property "sonar.host.url", "https://sonarcloud.io"
         property "sonar.login", "dca688ded1283db5f4328bd50396036abc908be4"
+        property "sonar.coverage.jacoco.xmlReportPaths", "${layout.buildDirectory.get()}/reports/jacoco/test/jacocoTestReport.xml"
     }
 }
+
+jacoco {
+    toolVersion = "0.8.10"
+}
+
+jacocoTestReport {
+    dependsOn test
+    reports {
+        xml.required.set(true)
+        csv.required.set(false)
+        html.outputLocation.set(layout.buildDirectory.dir("reports/jacoco"))
+    }

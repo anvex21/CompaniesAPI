@@ -58,7 +58,7 @@ sonarqube {
         property "sonar.organization", "anvex21"
         property "sonar.host.url", "https://sonarcloud.io"
         property "sonar.login", "dca688ded1283db5f4328bd50396036abc908be4"
-        property "sonar.coverage.jacoco.xmlReportPaths", "${layout.buildDirectory.get()}/reports/jacoco/test/jacocoTestReport.xml"
+        property "sonar.coverage.jacoco.xmlReportPaths", "build/reports/jacoco/test/jacocoTestReport.xml"
     }
 }
 

@@ -40,7 +40,6 @@ jobs:
             echo "Waiting for Postgres..."
             sleep 2
           done
-          
 
       - name: Test Connection
         run: |
@@ -56,3 +55,13 @@ jobs:
           CI_DB_PASSWORD: ${{ secrets.CI_DB_PASSWORD }}
           CI_DB_URL: ${{ secrets.CI_DB_URL }}
           FINNHUB_API_KEY: ${{ secrets.FINNHUB_API_KEY }}
+
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@master
+        with:
+          args: >
+            -Dsonar.projectKey=anvex21_CompaniesAPI
+            -Dsonar.organization=anvex21
+            -Dsonar.host.url=https://sonarcloud.io
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}

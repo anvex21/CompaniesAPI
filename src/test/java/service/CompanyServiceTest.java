@@ -9,6 +9,7 @@ import jakarta.ws.rs.WebApplicationException;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -45,14 +46,15 @@ public class CompanyServiceTest {
         dto.setWebsite("http://test.com");
         dto.setEmail("contact@test.com");
 
-        // create first company
+        // Create first company
         companyService.createCompany(dto);
 
-        // attempt duplicate
-        WebApplicationException ex = assertThrows(WebApplicationException.class, () -> {
-            companyService.createCompany(dto);
-        });
-        assertTrue(ex.getResponse().getEntity().toString().contains("already exists"));
+        // Prepare expected error map inline extraction
+        Map<String, String> expectedError = Map.of("error", "Company symbol '" + dto.getSymbol() + "' already exists");
+
+        // Attempt duplicate
+        WebApplicationException ex = assertThrows(WebApplicationException.class, () -> companyService.createCompany(dto));
+        assertTrue(ex.getResponse().getEntity().toString().contains(expectedError.get("error")));
     }
 
     @Test
@@ -67,7 +69,7 @@ public class CompanyServiceTest {
 
         Company c = companyService.createCompany(dto);
 
-        // update
+        // Update
         dto.setName("Gamma Inc");
         dto.setEmail("info@gamma.com");
         Company updated = companyService.updateCompany(c.id, dto);
@@ -86,16 +88,16 @@ public class CompanyServiceTest {
         dto.setWebsite("http://ghost.com");
         dto.setEmail("ghost@ghost.com");
 
-        WebApplicationException ex = assertThrows(WebApplicationException.class, () -> {
-            companyService.updateCompany(99999L, dto);
-        });
-        assertTrue(ex.getResponse().getEntity().toString().contains("not found"));
+        Map<String, String> expectedError = Map.of("error", "Company with id 99999 not found");
+
+        WebApplicationException ex = assertThrows(WebApplicationException.class, () -> companyService.updateCompany(99999L, dto));
+        assertTrue(ex.getResponse().getEntity().toString().contains(expectedError.get("error")));
     }
 
     @Test
     @TestTransaction
     void testUpdateCompanyDuplicateSymbol() {
-        // create first company
+        // Create first company
         CompanyDTO first = new CompanyDTO();
         first.setName("Alpha");
         first.setCountry("US");
@@ -104,7 +106,7 @@ public class CompanyServiceTest {
         first.setEmail("contact@alpha.com");
         Company c1 = companyService.createCompany(first);
 
-        // create second company
+        // Create second company
         CompanyDTO second = new CompanyDTO();
         second.setName("Beta");
         second.setCountry("US");
@@ -113,12 +115,12 @@ public class CompanyServiceTest {
         second.setEmail("contact@beta.com");
         Company c2 = companyService.createCompany(second);
 
-        // attempt to update second company with duplicate symbol
+        // Attempt to update second company with duplicate symbol
         second.setSymbol("ALPHA");
-        WebApplicationException ex = assertThrows(WebApplicationException.class, () -> {
-            companyService.updateCompany(c2.id, second);
-        });
-        assertTrue(ex.getResponse().getEntity().toString().contains("already exists"));
+        Map<String, String> expectedError = Map.of("error", "Company symbol '" + second.getSymbol() + "' already exists");
+
+        WebApplicationException ex = assertThrows(WebApplicationException.class, () -> companyService.updateCompany(c2.id, second));
+        assertTrue(ex.getResponse().getEntity().toString().contains(expectedError.get("error")));
     }
 
     @Test
@@ -134,6 +136,9 @@ public class CompanyServiceTest {
         companyService.createCompany(dto);
 
         List<Company> all = companyService.getAllCompanies();
+
+        // Ensure list is non-empty and contains our created company
+        assertFalse(all.isEmpty());
         assertTrue(all.stream().anyMatch(c -> "DELTA".equals(c.getSymbol())));
     }
 }

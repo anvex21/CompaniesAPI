@@ -67,3 +67,8 @@ jobs:
           ./gradlew test jacocoTestReport
           ./gradlew sonarqube \
             -Dsonar.coverage.jacoco.xmlReportPaths=build/reports/jacoco/test/jacocoTestReport.xml
+        env:
+          CI_DB_USERNAME: ${{ secrets.CI_DB_USERNAME }}
+          CI_DB_PASSWORD: ${{ secrets.CI_DB_PASSWORD }}
+          CI_DB_URL: jdbc:postgresql://localhost:5432/CompaniesDb_test
+          FINNHUB_API_KEY: ${{ secrets.FINNHUB_API_KEY }}

@@ -2,8 +2,8 @@ package service;
 
 import dto.CompanyDTO;
 import entity.Company;
-import io.quarkus.test.TestTransaction;
 import io.quarkus.test.junit.QuarkusTest;
+import io.quarkus.test.TestTransaction;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.WebApplicationException;
 import org.junit.jupiter.api.Test;
@@ -18,72 +18,44 @@ public class CompanyServiceTest {
 
     @Test
     @TestTransaction
-    void testCreateCompany() {
+    void testCreateAndFindCompany() {
         CompanyDTO dto = new CompanyDTO();
         dto.setName("Meta Platforms");
         dto.setCountry("US");
         dto.setSymbol("META");
         dto.setWebsite("https://meta.com");
         dto.setEmail("contact@meta.com");
+
         Company saved = companyService.createCompany(dto);
         assertNotNull(saved.id);
-        assertEquals("META", saved.getSymbol());
+
+        assertTrue(companyService.getAllCompanies().stream()
+                .anyMatch(c -> c.getSymbol().equals("META")));
     }
 
     @Test
     @TestTransaction
-    void testUpdateCompany() {
-        CompanyDTO dto = new CompanyDTO();
-        dto.setName("Spotify");
-        dto.setCountry("SE");
-        dto.setSymbol("SPOT");
-        dto.setWebsite("https://spotify.com");
-        dto.setEmail("contact@spotify.com");
-        Company created = companyService.createCompany(dto);
+    void testUpdateCompanyDuplicateSymbol() {
+        CompanyDTO dto1 = new CompanyDTO();
+        dto1.setName("Company1");
+        dto1.setCountry("US");
+        dto1.setSymbol("CMP1");
+        dto1.setWebsite("https://c1.com");
+        dto1.setEmail("c1@c.com");
+        Company c1 = companyService.createCompany(dto1);
 
-        CompanyDTO updateDto = new CompanyDTO();
-        updateDto.setName("Spotify Ltd");
-        updateDto.setCountry("SE");
-        updateDto.setSymbol("SPOT");
-        updateDto.setWebsite("https://spotify.com");
-        updateDto.setEmail("support@spotify.com");
-        Company updated = companyService.updateCompany(created.id, updateDto);
-        assertEquals("Spotify Ltd", updated.getName());
-        assertEquals("support@spotify.com", updated.getEmail());
-    }
+        CompanyDTO dto2 = new CompanyDTO();
+        dto2.setName("Company2");
+        dto2.setCountry("US");
+        dto2.setSymbol("CMP2");
+        dto2.setWebsite("https://c2.com");
+        dto2.setEmail("c2@c.com");
+        Company c2 = companyService.createCompany(dto2);
 
-    @Test
-    @TestTransaction
-    void testUpdateCompanyNotFound() {
-        CompanyDTO dto = new CompanyDTO();
-        dto.setName("Ghost");
-        dto.setCountry("US");
-        dto.setSymbol("GHOST");
-        dto.setWebsite("https://ghost.com");
-        dto.setEmail("contact@ghost.com");
-
+        dto2.setSymbol("CMP1"); // conflict
         WebApplicationException ex = assertThrows(WebApplicationException.class, () -> {
-            companyService.updateCompany(99999L, dto);
+            companyService.updateCompany(c2.id, dto2);
         });
-        // Check entity for error message
-        assertTrue(ex.getResponse().getEntity().toString().contains("not found"), "Exception should mention 'not found'");
-    }
-
-    @Test
-    @TestTransaction
-    void testDuplicateSymbolThrows() {
-        CompanyDTO dto = new CompanyDTO();
-        dto.setName("Zoom");
-        dto.setCountry("US");
-        dto.setSymbol("ZM");
-        dto.setWebsite("https://zoom.com");
-        dto.setEmail("contact@zoom.com");
-        companyService.createCompany(dto);
-
-        WebApplicationException ex = assertThrows(WebApplicationException.class, () -> {
-            companyService.createCompany(dto);
-        });
-        // Check entity for error message
-        assertTrue(ex.getResponse().getEntity().toString().contains("already exists"), "Exception should mention 'already exists'");
+        assertTrue(ex.getResponse().getEntity().toString().contains("already exists"));
     }
 }

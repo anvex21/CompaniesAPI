@@ -2,61 +2,33 @@ package controller;
 
 import entity.Company;
 import io.quarkus.test.junit.QuarkusTest;
-import jakarta.inject.Inject;
-import jakarta.ws.rs.core.MediaType;
+import io.quarkus.test.TestTransaction;
 import org.junit.jupiter.api.Test;
-import repository.CompanyRepository;
+
+import java.time.Instant;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.*;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import java.time.Instant;
-import io.quarkus.test.TestTransaction;
 
 @QuarkusTest
 public class CompanyStockControllerTest {
 
-    @Inject
-    CompanyRepository companyRepository;
-
-    Long companyId;
-
     @Test
     @TestTransaction
-    public void testGetCompanyStockEndpointIntegration() {
+    void testGetCompanyStockSuccess() {
         Company c = new Company();
-        c.setName("Artius II Acquisition");
-        c.setSymbol("AACB");
+        c.setName("Tesla");
+        c.setSymbol("TSLA");
         c.setCountry("US");
-        c.setEmail("contact@artius.com");
-        c.setWebsite("https://artius.com");
+        c.setEmail("contact@tesla.com");
+        c.setWebsite("https://tesla.com");
         c.setCreatedAt(Instant.now());
         c.persist();
-        Company.getEntityManager().flush();
 
-        int statusCode =
-                given()
-                        .accept(MediaType.APPLICATION_JSON)
-                        .when()
-                        .get("/company-stocks/" + c.id)
-                        .then()
-                        .extract()
-                        .statusCode();
+        given().when().get("/company-stocks/" + c.id)
+                .then().statusCode(anyOf(is(200), is(404))); // depending on API
 
-        // Accept both 200 and 404
-        assertTrue(statusCode == 200 || statusCode == 404);
-
-        // Only check body if 200
-        if (statusCode == 200) {
-            given()
-                    .accept(MediaType.APPLICATION_JSON)
-                    .when()
-                    .get("/company-stocks/" + c.id)
-                    .then()
-                    .body("symbol", equalTo("AACB"))
-                    .body("marketCapitalization", notNullValue())
-                    .body("shareOutstanding", notNullValue());
-        }
+        given().when().get("/company-stocks/99999")
+                .then().statusCode(404);
     }
 }

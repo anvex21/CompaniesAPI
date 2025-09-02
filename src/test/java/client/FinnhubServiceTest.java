@@ -29,7 +29,7 @@ public class FinnhubServiceTest {
         company.setEmail("contact@adoble.com");
         company.setWebsite("https://adoble.com");
         company.setCreatedAt(Instant.now());
-        company.persist(); // Panache persist method
+        company.persist(); // Panache persist method; lives on after the application is shut down
 
         Long companyId = company.id; // ID is now set
 

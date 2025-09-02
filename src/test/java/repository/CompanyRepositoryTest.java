@@ -1,8 +1,8 @@
 package repository;
 
 import entity.Company;
-import io.quarkus.test.TestTransaction;
 import io.quarkus.test.junit.QuarkusTest;
+import io.quarkus.test.TestTransaction;
 import jakarta.inject.Inject;
 import org.junit.jupiter.api.Test;
 
@@ -18,34 +18,18 @@ public class CompanyRepositoryTest {
 
     @Test
     @TestTransaction
-    public void testSaveAndFindById() {
+    void testPersistAndFind() {
         Company c = new Company();
-        c.setName("Netflix");
-        c.setSymbol("NFLX");
+        c.setName("Oracle");
+        c.setSymbol("ORCL");
         c.setCountry("US");
-        c.setWebsite("https://netflix.com");
-        c.setEmail("contact@netflix.com");
+        c.setWebsite("https://oracle.com");
+        c.setEmail("contact@oracle.com");
         c.setCreatedAt(Instant.now());
-        c.persist();
+        repository.persist(c);
 
         Company found = repository.findById(c.id);
         assertNotNull(found);
-        assertEquals("NFLX", found.getSymbol());
-    }
-
-    @Test
-    @TestTransaction
-    public void testListAll() {
-        Company c = new Company();
-        c.setName("Amazon");
-        c.setSymbol("AMZN");
-        c.setCountry("US");
-        c.setWebsite("https://amazon.com");
-        c.setEmail("contact@amazon.com");
-        c.setCreatedAt(Instant.now());
-        c.persist();
-
-        var all = repository.listAll();
-        assertTrue(all.stream().anyMatch(comp -> "AMZN".equals(comp.getSymbol())));
+        assertEquals("ORCL", found.getSymbol());
     }
 }

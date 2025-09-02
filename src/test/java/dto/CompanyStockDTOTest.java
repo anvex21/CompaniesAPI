@@ -10,19 +10,27 @@ import static org.junit.jupiter.api.Assertions.*;
 public class CompanyStockDTOTest {
 
     @Test
-    @TestTransaction
-    public void testGettersSetters() {
+    public void testGettersAndSetters() {
         CompanyStockDTO dto = new CompanyStockDTO();
-        dto.setName("Adobe");
-        dto.setSymbol("ADBE");
-        dto.setCountry("US");
-        dto.setWebsite("https://adobe.com");
-        dto.setEmail("contact@adobe.com");
-        dto.setMarketCapitalization(1000.0);
-        dto.setShareOutstanding(10.0);
-        dto.setFetchedAt(Instant.now());
+        Instant now = Instant.now();
 
-        assertEquals("ADBE", dto.getSymbol());
-        assertEquals(1000.0, dto.getMarketCapitalization());
+        dto.setName("TestCo");
+        dto.setCountry("BG");
+        dto.setSymbol("TST");
+        dto.setWebsite("https://testco.com");
+        dto.setEmail("info@testco.com");
+        dto.setMarketCapitalization(12345.0);
+        dto.setShareOutstanding(6789.0);
+        dto.setFetchedAt(now);
+
+        // call getters to cover them
+        assertEquals("TestCo", dto.getName());
+        assertEquals("BG", dto.getCountry());
+        assertEquals("TST", dto.getSymbol());
+        assertEquals("https://testco.com", dto.getWebsite());
+        assertEquals("info@testco.com", dto.getEmail());
+        assertEquals(12345.0, dto.getMarketCapitalization());
+        assertEquals(6789.0, dto.getShareOutstanding());
+        assertEquals(now, dto.getFetchedAt());
     }
 }

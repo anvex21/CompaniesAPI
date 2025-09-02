@@ -2,11 +2,13 @@ package service;
 
 import dto.CompanyDTO;
 import entity.Company;
-import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.TestTransaction;
+import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.WebApplicationException;
 import org.junit.jupiter.api.Test;
+
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -18,44 +20,120 @@ public class CompanyServiceTest {
 
     @Test
     @TestTransaction
-    void testCreateAndFindCompany() {
+    void testCreateCompanySuccess() {
         CompanyDTO dto = new CompanyDTO();
-        dto.setName("Meta Platforms");
+        dto.setName("NewCorp");
         dto.setCountry("US");
-        dto.setSymbol("META");
-        dto.setWebsite("https://meta.com");
-        dto.setEmail("contact@meta.com");
+        dto.setSymbol("NEW");
+        dto.setWebsite("http://new.com");
+        dto.setEmail("info@new.com");
 
-        Company saved = companyService.createCompany(dto);
-        assertNotNull(saved.id);
+        Company created = companyService.createCompany(dto);
 
-        assertTrue(companyService.getAllCompanies().stream()
-                .anyMatch(c -> c.getSymbol().equals("META")));
+        assertNotNull(created.id);
+        assertEquals("NEW", created.getSymbol());
+        assertEquals("NewCorp", created.getName());
+    }
+
+    @Test
+    @TestTransaction
+    void testCreateCompanyDuplicateSymbol() {
+        CompanyDTO dto = new CompanyDTO();
+        dto.setName("TestCorp");
+        dto.setCountry("US");
+        dto.setSymbol("DUP");
+        dto.setWebsite("http://test.com");
+        dto.setEmail("contact@test.com");
+
+        // create first company
+        companyService.createCompany(dto);
+
+        // attempt duplicate
+        WebApplicationException ex = assertThrows(WebApplicationException.class, () -> {
+            companyService.createCompany(dto);
+        });
+        assertTrue(ex.getResponse().getEntity().toString().contains("already exists"));
+    }
+
+    @Test
+    @TestTransaction
+    void testUpdateCompanySuccess() {
+        CompanyDTO dto = new CompanyDTO();
+        dto.setName("Gamma");
+        dto.setCountry("US");
+        dto.setSymbol("GAMMA");
+        dto.setWebsite("http://gamma.com");
+        dto.setEmail("contact@gamma.com");
+
+        Company c = companyService.createCompany(dto);
+
+        // update
+        dto.setName("Gamma Inc");
+        dto.setEmail("info@gamma.com");
+        Company updated = companyService.updateCompany(c.id, dto);
+
+        assertEquals("Gamma Inc", updated.getName());
+        assertEquals("info@gamma.com", updated.getEmail());
+    }
+
+    @Test
+    @TestTransaction
+    void testUpdateCompanyNotFound() {
+        CompanyDTO dto = new CompanyDTO();
+        dto.setName("GhostCorp");
+        dto.setCountry("US");
+        dto.setSymbol("GHOST");
+        dto.setWebsite("http://ghost.com");
+        dto.setEmail("ghost@ghost.com");
+
+        WebApplicationException ex = assertThrows(WebApplicationException.class, () -> {
+            companyService.updateCompany(99999L, dto);
+        });
+        assertTrue(ex.getResponse().getEntity().toString().contains("not found"));
     }
 
     @Test
     @TestTransaction
     void testUpdateCompanyDuplicateSymbol() {
-        CompanyDTO dto1 = new CompanyDTO();
-        dto1.setName("Company1");
-        dto1.setCountry("US");
-        dto1.setSymbol("CMP1");
-        dto1.setWebsite("https://c1.com");
-        dto1.setEmail("c1@c.com");
-        Company c1 = companyService.createCompany(dto1);
+        // create first company
+        CompanyDTO first = new CompanyDTO();
+        first.setName("Alpha");
+        first.setCountry("US");
+        first.setSymbol("ALPHA");
+        first.setWebsite("http://alpha.com");
+        first.setEmail("contact@alpha.com");
+        Company c1 = companyService.createCompany(first);
 
-        CompanyDTO dto2 = new CompanyDTO();
-        dto2.setName("Company2");
-        dto2.setCountry("US");
-        dto2.setSymbol("CMP2");
-        dto2.setWebsite("https://c2.com");
-        dto2.setEmail("c2@c.com");
-        Company c2 = companyService.createCompany(dto2);
+        // create second company
+        CompanyDTO second = new CompanyDTO();
+        second.setName("Beta");
+        second.setCountry("US");
+        second.setSymbol("BETA");
+        second.setWebsite("http://beta.com");
+        second.setEmail("contact@beta.com");
+        Company c2 = companyService.createCompany(second);
 
-        dto2.setSymbol("CMP1"); // conflict
+        // attempt to update second company with duplicate symbol
+        second.setSymbol("ALPHA");
         WebApplicationException ex = assertThrows(WebApplicationException.class, () -> {
-            companyService.updateCompany(c2.id, dto2);
+            companyService.updateCompany(c2.id, second);
         });
         assertTrue(ex.getResponse().getEntity().toString().contains("already exists"));
+    }
+
+    @Test
+    @TestTransaction
+    void testGetAllCompanies() {
+        CompanyDTO dto = new CompanyDTO();
+        dto.setName("Delta");
+        dto.setCountry("US");
+        dto.setSymbol("DELTA");
+        dto.setWebsite("http://delta.com");
+        dto.setEmail("contact@delta.com");
+
+        companyService.createCompany(dto);
+
+        List<Company> all = companyService.getAllCompanies();
+        assertTrue(all.stream().anyMatch(c -> "DELTA".equals(c.getSymbol())));
     }
 }

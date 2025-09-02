@@ -41,6 +41,12 @@ jobs:
             sleep 2
           done
 
+      - name: Create test database
+        run: |
+          sudo apt-get update
+          sudo apt-get install postgresql-client -y
+          PGPASSWORD=postgres psql -h localhost -U postgres -c "CREATE DATABASE \"CompaniesDb_test\";"
+
       - name: Test Connection
         run: |
           sudo apt-get update

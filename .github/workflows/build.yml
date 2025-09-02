@@ -1,4 +1,4 @@
-name: Build and Test with Gradle
+name: Build and Test with Gradle and PostgreSQL
 
 on:
   push:
@@ -9,6 +9,20 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        ports:
+          - 5432:5432
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: postgres
+        options: >-
+          --health-cmd="pg_isready -U postgres"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
 
     steps:
       - uses: actions/checkout@v4
@@ -19,10 +33,25 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
+      - name: Wait for PostgreSQL
+        run: |
+          for i in {1..30}; do
+            nc -z localhost 5432 && echo "Postgres is ready" && break
+            echo "Waiting for Postgres..."
+            sleep 2
+          done
+
+      - name: Create Companies_test database
+        run: |
+          sudo apt-get update
+          sudo apt-get install postgresql-client -y
+          PGPASSWORD=postgres psql -h localhost -U postgres -d postgres -c "CREATE DATABASE \"Companies_test\";"
+
       - name: Build and test with Gradle
         run: ./gradlew --no-daemon clean build
         env:
-          QUARKUS_PROFILE: ci
+          QUARKUS_PROFILE: test
+          CI_DB_PASSWORD: postgres
           FINNHUB_API_KEY: ${{ secrets.FINNHUB_API_KEY }}
 
       - name: SonarQube JacocoTest

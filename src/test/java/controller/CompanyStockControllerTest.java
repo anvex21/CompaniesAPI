@@ -26,11 +26,11 @@ public class CompanyStockControllerTest {
     @TestTransaction
     public void testGetCompanyStockEndpointIntegration() {
         Company c = new Company();
-        c.setName("Adobe");
-        c.setSymbol("ADBE");
+        c.setName("Artius II Acquisition");
+        c.setSymbol("AACB");
         c.setCountry("US");
-        c.setEmail("contact@adobe.com");
-        c.setWebsite("https://adobe.com");
+        c.setEmail("contact@artius.com");
+        c.setWebsite("https://artius.com");
         c.setCreatedAt(Instant.now());
         c.persist();
         Company.getEntityManager().flush();
@@ -54,7 +54,7 @@ public class CompanyStockControllerTest {
                     .when()
                     .get("/company-stocks/" + c.id)
                     .then()
-                    .body("symbol", equalTo("ADBE"))
+                    .body("symbol", equalTo("AACB"))
                     .body("marketCapitalization", notNullValue())
                     .body("shareOutstanding", notNullValue());
         }

@@ -1,3 +1,5 @@
+package client;
+
 import entity.Company;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;

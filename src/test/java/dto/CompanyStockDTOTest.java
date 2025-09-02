@@ -1,4 +1,5 @@
-import dto.CompanyStockDTO;
+package dto;
+
 import io.quarkus.test.TestTransaction;
 import org.junit.jupiter.api.Test;
 

@@ -1,4 +1,5 @@
-import dto.CompanyDTO;
+package dto;
+
 import io.quarkus.test.TestTransaction;
 import jakarta.validation.ConstraintViolation;
 import org.junit.jupiter.api.Test;

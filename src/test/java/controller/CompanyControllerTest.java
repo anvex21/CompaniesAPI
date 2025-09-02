@@ -1,3 +1,5 @@
+package controller;
+
 import dto.CompanyDTO;
 import dto.CompanyResponseDTO;
 import io.quarkus.test.TestTransaction;
@@ -8,7 +10,6 @@ import service.CompanyService;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 @QuarkusTest
 public class CompanyControllerTest {

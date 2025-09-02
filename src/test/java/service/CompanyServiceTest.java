@@ -1,3 +1,5 @@
+package service;
+
 import dto.CompanyDTO;
 import entity.Company;
 import io.quarkus.test.TestTransaction;
@@ -5,7 +7,6 @@ import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.WebApplicationException;
 import org.junit.jupiter.api.Test;
-import service.CompanyService;
 
 import static org.junit.jupiter.api.Assertions.*;
 

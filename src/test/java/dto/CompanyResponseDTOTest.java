@@ -1,4 +1,5 @@
-import dto.CompanyResponseDTO;
+package dto;
+
 import entity.Company;
 import io.quarkus.test.TestTransaction;
 import org.junit.jupiter.api.Test;

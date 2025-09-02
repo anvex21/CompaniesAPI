@@ -13,7 +13,7 @@ public class CompanyResourceTest {
     public void testCreateAndGetCompany() {
         given()
                 .contentType("application/json")
-                .body("{\"name\": \"Oracle\", \"country\": \"US\", \"symbol\": \"ORCL\", \"website\": \"http://oracle.com\", \"email\": \"contact@oracle.com\"}")
+                .body("{\"name\": \"SpaceX\", \"country\": \"US\", \"symbol\": \"SPCX\", \"website\": \"http://spacex.com\", \"email\": \"contact@spacex.com\"}")
                 .when().post("/companies")
                 .then()
                 .statusCode(201);
@@ -22,6 +22,6 @@ public class CompanyResourceTest {
                 .when().get("/companies")
                 .then()
                 .statusCode(200)
-                .body(containsString("Oracle"));
+                .body(containsString("SpaceX"));
     }
 }

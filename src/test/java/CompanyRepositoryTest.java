@@ -1,7 +1,7 @@
 import entity.Company;
+import io.quarkus.test.TestTransaction;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
-import io.quarkus.test.TestTransaction;
 import org.junit.jupiter.api.Test;
 import repository.CompanyRepository;
 
@@ -30,5 +30,21 @@ public class CompanyRepositoryTest {
         Company found = repository.findById(c.id);
         assertNotNull(found);
         assertEquals("NFLX", found.getSymbol());
+    }
+
+    @Test
+    @TestTransaction
+    public void testListAll() {
+        Company c = new Company();
+        c.setName("Amazon");
+        c.setSymbol("AMZN");
+        c.setCountry("US");
+        c.setWebsite("https://amazon.com");
+        c.setEmail("contact@amazon.com");
+        c.setCreatedAt(Instant.now());
+        c.persist();
+
+        var all = repository.listAll();
+        assertTrue(all.stream().anyMatch(comp -> "AMZN".equals(comp.getSymbol())));
     }
 }

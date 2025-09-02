@@ -15,9 +15,9 @@ jobs:
         ports:
           - 5432:5432
         env:
+          POSTGRES_DB: CompaniesDb
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
-          POSTGRES_DB: postgres
         options: >-
           --health-cmd="pg_isready -U postgres"
           --health-interval=10s
@@ -41,17 +41,19 @@ jobs:
             sleep 2
           done
 
-      - name: Create Companies_test database
+      - name: Test Connection
         run: |
           sudo apt-get update
           sudo apt-get install postgresql-client -y
-          PGPASSWORD=postgres psql -h localhost -U postgres -d postgres -c "CREATE DATABASE \"Companies_test\";"
+          PGPASSWORD=${{ secrets.CI_DB_PASSWORD }} psql -h localhost -U ${{ secrets.CI_DB_USERNAME }} -d CompaniesDb -c '\dt'
 
       - name: Build and test with Gradle
         run: ./gradlew --no-daemon clean build
         env:
-          QUARKUS_PROFILE: test
-          CI_DB_PASSWORD: postgres
+          QUARKUS_PROFILE: ci
+          CI_DB_USERNAME: ${{ secrets.CI_DB_USERNAME }}
+          CI_DB_PASSWORD: ${{ secrets.CI_DB_PASSWORD }}
+          CI_DB_URL: ${{ secrets.CI_DB_URL }}
           FINNHUB_API_KEY: ${{ secrets.FINNHUB_API_KEY }}
 
       - name: SonarQube JacocoTest

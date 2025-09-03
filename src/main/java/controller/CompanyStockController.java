@@ -1,7 +1,6 @@
 package controller;
 
 import dto.CompanyStockDTO;
-import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
@@ -13,7 +12,7 @@ import service.CompanyStockService;
 @Tag(name = "Company Stocks")
 public class CompanyStockController {
     private final CompanyStockService stockService;
-    public CompanyStockController(CompanyStockService companyStockService, CompanyStockService stockService) {
+    public CompanyStockController(CompanyStockService stockService) {
         this.stockService = stockService;
     }
 

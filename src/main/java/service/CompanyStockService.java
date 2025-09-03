@@ -6,7 +6,6 @@ import dto.CompanyStockDTO;
 import entity.Company;
 import entity.CompanyStock;
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.WebApplicationException;
 import org.eclipse.microprofile.config.inject.ConfigProperty;

@@ -7,7 +7,6 @@ import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 import service.CompanyService;
 import entity.Company;
 import dto.CompanyDTO;
-import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 

@@ -12,9 +12,10 @@ import service.CompanyStockService;
 @Consumes(MediaType.APPLICATION_JSON)
 @Tag(name = "Company Stocks")
 public class CompanyStockController {
-
-    @Inject
-    CompanyStockService stockService;
+    private final CompanyStockService stockService;
+    public CompanyStockController(CompanyStockService companyStockService, CompanyStockService stockService) {
+        this.stockService = stockService;
+    }
 
     @GET
     @Path("/{companyId}")

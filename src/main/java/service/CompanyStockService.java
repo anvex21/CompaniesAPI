@@ -20,18 +20,22 @@ import java.util.Optional;
 @ApplicationScoped
 public class CompanyStockService {
 
-    @Inject
-    CompanyRepository companyRepository;
+    private final CompanyRepository companyRepository;
+    private final CompanyStockRepository stockRepository;
+    private final FinnhubClient finnhubClient;
+    private final String apiKey;
 
-    @Inject
-    CompanyStockRepository stockRepository;
-
-    @Inject
-    @RestClient
-    FinnhubClient finnhubClient;
-
-    @ConfigProperty(name = "finnhub.api.key")
-    String apiKey;
+    public CompanyStockService(
+            CompanyRepository companyRepository,
+            CompanyStockRepository stockRepository,
+            @RestClient FinnhubClient finnhubClient,
+            @ConfigProperty(name = "finnhub.api.key") String apiKey
+    ) {
+        this.companyRepository = companyRepository;
+        this.stockRepository = stockRepository;
+        this.finnhubClient = finnhubClient;
+        this.apiKey = apiKey;
+    }
 
     @Transactional // Starts a transaction, if the method finishes normally -> saves changes in the db. If not -> cancels changes (rollback)
     public CompanyStock getOrFetchCompanyStock(Long companyId) {

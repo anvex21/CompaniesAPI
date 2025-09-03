@@ -11,7 +11,7 @@ import java.time.Instant;
 import static org.junit.jupiter.api.Assertions.*;
 
 @QuarkusTest
-public class CompanyRepositoryTest {
+class CompanyRepositoryTest {
 
     @Inject
     CompanyRepository repository;

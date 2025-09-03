@@ -7,10 +7,10 @@ import java.time.Instant;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class CompanyStockDTOTest {
+class CompanyStockDTOTest {
 
     @Test
-    public void testGettersAndSetters() {
+    void testGettersAndSetters() {
         CompanyStockDTO dto = new CompanyStockDTO();
         Instant now = Instant.now();
 

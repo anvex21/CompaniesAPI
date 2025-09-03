@@ -8,11 +8,11 @@ import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.containsString;
 
 @QuarkusTest
-public class CompanyResourceTest {
+class CompanyResourceTest {
 
     @Test
     @TestTransaction
-    public void testCreateAndGetCompany() {
+    void testCreateAndGetCompany() {
         given()
                 .contentType("application/json")
                 .body("{\"name\": \"SpaceX\", \"country\": \"US\", \"symbol\": \"SPCX\", \"website\": \"http://spacex.com\", \"email\": \"contact@spacex.com\"}")

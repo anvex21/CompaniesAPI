@@ -12,11 +12,11 @@ import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class CompanyDTOTest {
+class CompanyDTOTest {
 
     @Test
     @TestTransaction
-    public void testValidation() {
+    void testValidation() {
         CompanyDTO dto = new CompanyDTO();
         dto.setName(""); // invalid
         dto.setCountry("USA"); // invalid
@@ -30,7 +30,7 @@ public class CompanyDTOTest {
 
     @Test
     @TestTransaction
-    public void testGettersSetters() {
+    void testGettersSetters() {
         CompanyDTO dto = new CompanyDTO();
         dto.setName("IBM");
         dto.setCountry("US");

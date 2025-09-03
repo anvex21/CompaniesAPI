@@ -11,7 +11,7 @@ import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.*;
 
 @QuarkusTest
-public class CompanyStockControllerTest {
+class CompanyStockControllerTest {
 
     @Test
     @TestTransaction

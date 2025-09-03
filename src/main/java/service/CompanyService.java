@@ -16,8 +16,13 @@ import java.util.Map;
 @ApplicationScoped
 public class CompanyService {
     private static final String ERROR_KEY = "error";
+    private final CompanyRepository repository;
+
+    // Constructor injection
     @Inject
-    CompanyRepository repository;
+    public CompanyService(CompanyRepository repository) {
+        this.repository = repository;
+    }
 
     @Transactional // Starts a transaction, if the method finishes normally -> saves changes in the db. If not -> cancels changes (rollback)
     public Company createCompany(CompanyDTO dto) {

@@ -14,7 +14,7 @@ import java.util.Map;
 import static org.junit.jupiter.api.Assertions.*;
 
 @QuarkusTest
-public class CompanyServiceTest {
+class CompanyServiceTest {
 
     @Inject
     CompanyService companyService;
@@ -104,7 +104,7 @@ public class CompanyServiceTest {
         first.setSymbol("ALPHA");
         first.setWebsite("http://alpha.com");
         first.setEmail("contact@alpha.com");
-        Company c1 = companyService.createCompany(first);
+        companyService.createCompany(first);
 
         // Create second company
         CompanyDTO second = new CompanyDTO();

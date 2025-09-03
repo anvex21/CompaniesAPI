@@ -1,17 +1,16 @@
 package dto;
 
 import entity.Company;
-import io.quarkus.test.TestTransaction;
 import org.junit.jupiter.api.Test;
 
 import java.time.Instant;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class CompanyResponseDTOTest {
+class CompanyResponseDTOTest {
 
     @Test
-    public void testGettersAndFromEntity() {
+    void testGettersAndFromEntity() {
         Instant now = Instant.now();
         Company c = new Company();
         c.id = 1L;

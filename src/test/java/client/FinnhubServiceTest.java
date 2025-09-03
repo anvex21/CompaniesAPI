@@ -14,13 +14,13 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @QuarkusTest
 @Transactional
-public class FinnhubServiceTest {
+class FinnhubServiceTest {
 
     @Inject
     CompanyStockService companyStockService;
 
     @Test
-    public void testGetCompanyProfile() {
+    void testGetCompanyProfile() {
         // Setup: Create and persist the company (Panache assigns the ID)
         Company company = new Company();
         company.setSymbol("ADBE");

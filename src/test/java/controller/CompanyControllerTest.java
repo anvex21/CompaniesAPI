@@ -12,14 +12,14 @@ import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.*;
 
 @QuarkusTest
-public class CompanyControllerTest {
+class CompanyControllerTest {
 
     @Inject
     CompanyService companyService;
 
     @Test
     @TestTransaction
-    public void testCreateCompanySuccess() {
+   void testCreateCompanySuccess() {
         CompanyDTO dto = new CompanyDTO();
         dto.setName("Apple");
         dto.setCountry("US");
@@ -39,7 +39,7 @@ public class CompanyControllerTest {
 
     @Test
     @TestTransaction
-    public void testCreateCompanyInvalidDTO() {
+    void testCreateCompanyInvalidDTO() {
         CompanyDTO dto = new CompanyDTO();
         dto.setName(""); // invalid
         dto.setCountry("USA"); // invalid (length>2)
@@ -55,7 +55,7 @@ public class CompanyControllerTest {
 
     @Test
     @TestTransaction
-    public void testCreateCompanyDuplicateSymbol() {
+    void testCreateCompanyDuplicateSymbol() {
         CompanyDTO dto = new CompanyDTO();
         dto.setName("IBM");
         dto.setCountry("US");
@@ -84,7 +84,7 @@ public class CompanyControllerTest {
 
     @Test
     @TestTransaction
-    public void testGetCompanies() {
+   void testGetCompanies() {
         CompanyDTO dto = new CompanyDTO();
         dto.setName("Oracle");
         dto.setCountry("US");
@@ -110,7 +110,7 @@ public class CompanyControllerTest {
 
     @Test
     @TestTransaction
-    public void testUpdateCompanySuccess() {
+    void testUpdateCompanySuccess() {
         CompanyDTO dto = new CompanyDTO();
         dto.setName("Tesla");
         dto.setCountry("US");
@@ -148,7 +148,7 @@ public class CompanyControllerTest {
 
     @Test
     @TestTransaction
-    public void testUpdateCompanyNotFound() {
+   void testUpdateCompanyNotFound() {
         CompanyDTO updateDto = new CompanyDTO();
         updateDto.setName("Nonexistent");
         updateDto.setCountry("US");

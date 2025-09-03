@@ -13,7 +13,6 @@ import jakarta.ws.rs.core.MediaType;
 
 import java.net.URI;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Path("/companies")
 @Produces(MediaType.APPLICATION_JSON)
@@ -21,8 +20,12 @@ import java.util.stream.Collectors;
 @Tag(name = "Companies")
 public class CompanyController {
 
-    @Inject
-    CompanyService service;
+    private final CompanyService service;
+
+    // Constructor injection
+    public CompanyController(CompanyService service) {
+        this.service = service;
+    }
 
     @POST
     public Response createCompany(@Valid CompanyDTO dto) {
